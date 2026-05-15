@@ -16,17 +16,37 @@ FPS = 10
 BLACK = (0, 0, 0)
 GRAY = (40, 40, 40)
 LIGHT_GRAY = (50, 50, 50)
+GREEN = (39, 174, 96)
+DARK_GREEN = (27, 120, 66)
 
 # Setup window
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption("Snake Game")
 clock = pygame.time.Clock()
 
+# Snake starting position
+snake = [(15, 15), (14, 15), (13, 15)]
+direction = (1, 0)  # Moving right
+
 def draw_grid():
     for x in range(0, WINDOW_WIDTH, GRID_SIZE):
         pygame.draw.line(screen, LIGHT_GRAY, (x, 0), (x, WINDOW_HEIGHT))
     for y in range(0, WINDOW_HEIGHT, GRID_SIZE):
         pygame.draw.line(screen, LIGHT_GRAY, (0, y), (WINDOW_WIDTH, y))
+
+def draw_snake(snake):
+    for i, (x, y) in enumerate(snake):
+        color = DARK_GREEN if i == 0 else GREEN
+        pygame.draw.rect(screen, color, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+        pygame.draw.rect(screen, GRAY, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE), 1)
+
+def move_snake(snake, direction):
+    head_x, head_y = snake[0]
+    dx, dy = direction
+    new_head = (head_x + dx, head_y + dy)
+    snake.insert(0, new_head)
+    snake.pop()
+    return snake
 
 # Game loop
 while True:
@@ -35,7 +55,10 @@ while True:
             pygame.quit()
             sys.exit()
 
+    snake = move_snake(snake, direction)
+
     screen.fill(GRAY)
     draw_grid()
+    draw_snake(snake)
     pygame.display.flip()
     clock.tick(FPS)
