@@ -14,13 +14,16 @@ GRID_HEIGHT = WINDOW_HEIGHT // GRID_SIZE
 FPS = 10
 
 # Colors
-BLACK = (0, 0, 0)
-GRAY = (40, 40, 40)
-LIGHT_GRAY = (50, 50, 50)
-GREEN = (39, 174, 96)
-DARK_GREEN = (27, 120, 66)
-RED = (231, 76, 60)
-DARK_RED = (169, 50, 38)
+BLACK      = (0, 0, 0)
+GRAY       = (25, 25, 35)
+LIGHT_GRAY = (40, 40, 55)
+GREEN      = (46, 204, 113)
+DARK_GREEN = (39, 174, 96)
+HEAD_GREEN = (26, 188, 156)
+RED        = (231, 76, 60)
+DARK_RED   = (192, 57, 43)
+WHITE      = (255, 255, 255)
+YELLOW     = (241, 196, 15)
 
 # Setup window
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -41,15 +44,33 @@ def draw_grid():
 
 def draw_snake(snake):
     for i, (x, y) in enumerate(snake):
-        color = DARK_GREEN if i == 0 else GREEN
-        pygame.draw.rect(screen, color, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
-        pygame.draw.rect(screen, GRAY, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE), 1)
+        if i == 0:
+            # Head — rounded and different color
+            color = HEAD_GREEN
+        else:
+            # Body — gradient effect
+            fade = max(0, 255 - i * 8)
+            color = (0, min(255, 100 + i * 3), min(255, 80 + i * 5))
+
+        rect = pygame.Rect(x * GRID_SIZE + 2, y * GRID_SIZE + 2, GRID_SIZE - 4, GRID_SIZE - 4)
+        pygame.draw.rect(screen, color, rect, border_radius=4)
+
+        # Eyes on head
+        if i == 0:
+            pygame.draw.circle(screen, WHITE, (x * GRID_SIZE + 6, y * GRID_SIZE + 6), 3)
+            pygame.draw.circle(screen, WHITE, (x * GRID_SIZE + 14, y * GRID_SIZE + 6), 3)
+            pygame.draw.circle(screen, BLACK, (x * GRID_SIZE + 7, y * GRID_SIZE + 7), 1)
+            pygame.draw.circle(screen, BLACK, (x * GRID_SIZE + 15, y * GRID_SIZE + 7), 1)
 
 def draw_food(food):
     x, y = food
-    pygame.draw.rect(screen, RED, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
-    pygame.draw.rect(screen, DARK_RED, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE), 2)
-
+    # Apple body
+    pygame.draw.circle(screen, RED,
+        (x * GRID_SIZE + GRID_SIZE // 2, y * GRID_SIZE + GRID_SIZE // 2),
+        GRID_SIZE // 2 - 2)
+    # Apple shine
+    pygame.draw.circle(screen, (255, 120, 100),
+        (x * GRID_SIZE + 6, y * GRID_SIZE + 6), 3)
 def check_collision(snake):
     head = snake[0]
     # Wall collision
@@ -71,8 +92,10 @@ def check_food(snake, food, score):
     return food, score
 
 def draw_score(score):
-    text = font_small.render(f"Score: {score}", True, (255, 255, 255))
-    screen.blit(text, (10, 10))
+    # Background bar
+    pygame.draw.rect(screen, (35, 35, 50), (0, 0, WINDOW_WIDTH, 36))
+    text = font_small.render(f"🐍 Score: {score}", True, YELLOW)
+    screen.blit(text, (10, 8))
 
 def draw_game_over(score):
     overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
