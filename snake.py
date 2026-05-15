@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 # Initialize Pygame
 pygame.init()
@@ -18,6 +19,8 @@ GRAY = (40, 40, 40)
 LIGHT_GRAY = (50, 50, 50)
 GREEN = (39, 174, 96)
 DARK_GREEN = (27, 120, 66)
+RED = (231, 76, 60)
+DARK_RED = (169, 50, 38)
 
 # Setup window
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -40,6 +43,11 @@ def draw_snake(snake):
         pygame.draw.rect(screen, color, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
         pygame.draw.rect(screen, GRAY, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE), 1)
 
+def draw_food(food):
+    x, y = food
+    pygame.draw.rect(screen, RED, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+    pygame.draw.rect(screen, DARK_RED, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE), 2)
+
 def move_snake(snake, direction):
     head_x, head_y = snake[0]
     dx, dy = direction
@@ -47,6 +55,8 @@ def move_snake(snake, direction):
     snake.insert(0, new_head)
     snake.pop()
     return snake
+
+food = (random.randint(0, GRID_WIDTH - 1), random.randint(0, GRID_HEIGHT - 1))
 
 # Game loop
 while True:
@@ -70,5 +80,6 @@ while True:
     screen.fill(GRAY)
     draw_grid()
     draw_snake(snake)
+    draw_food(food)
     pygame.display.flip()
     clock.tick(FPS)
