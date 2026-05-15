@@ -55,6 +55,16 @@ while True:
             pygame.quit()
             sys.exit()
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP and direction != (0, 1):
+                direction = (0, -1)
+            elif event.key == pygame.K_DOWN and direction != (0, -1):
+                direction = (0, 1)
+            elif event.key == pygame.K_LEFT and direction != (1, 0):
+                direction = (-1, 0)
+            elif event.key == pygame.K_RIGHT and direction != (-1, 0):
+                direction = (1, 0)
+
     snake = move_snake(snake, direction)
 
     screen.fill(GRAY)
