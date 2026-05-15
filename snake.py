@@ -48,6 +48,27 @@ def draw_food(food):
     pygame.draw.rect(screen, RED, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE))
     pygame.draw.rect(screen, DARK_RED, (x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE), 2)
 
+def check_collision(snake):
+    head = snake[0]
+    # Wall collision
+    if head[0] < 0 or head[0] >= GRID_WIDTH:
+        return True
+    if head[1] < 0 or head[1] >= GRID_HEIGHT:
+        return True
+    # Self collision
+    if head in snake[1:]:
+        return True
+    return False
+
+def check_food(snake, food):
+    if snake[0] == food:
+        # Spawn new food
+        new_food = (random.randint(0, GRID_WIDTH - 1), random.randint(0, GRID_HEIGHT - 1))
+        # Grow snake by adding tail again
+        snake.append(snake[-1])
+        return new_food
+    return food
+
 def move_snake(snake, direction):
     head_x, head_y = snake[0]
     dx, dy = direction
@@ -76,6 +97,15 @@ while True:
                 direction = (1, 0)
 
     snake = move_snake(snake, direction)
+
+    # Check collisions
+    if check_collision(snake):
+        print("Game Over!")
+        pygame.quit()
+        sys.exit()
+
+    # Check food
+    food = check_food(snake, food)
 
     screen.fill(GRAY)
     draw_grid()
