@@ -1,0 +1,67 @@
+# 🐍 Snake Game
+
+A classic Snake game built with Python and Pygame.
+
+---
+
+## 🎮 Gameplay
+
+Use arrow keys to control the snake. Eat the red apples to grow and earn points. Avoid hitting the walls or yourself!
+
+| Key | Action |
+|-----|--------|
+| ⬆️ Arrow Up | Move up |
+| ⬇️ Arrow Down | Move down |
+| ⬅️ Arrow Left | Move left |
+| ➡️ Arrow Right | Move right |
+| **R** | Restart after Game Over |
+
+---
+
+## 📸 Screenshot
+
+![Snake Game](screenshot.png)
+
+---
+
+## 🛠️ Tech Stack
+
+- **Python 3.13**
+- **Pygame**
+
+---
+
+## 🚀 How to Run
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/YOUR_USERNAME/snake_game
+cd snake_game
+```
+
+### 2. Install dependencies
+```bash
+pip install pygame
+```
+
+### 3. Run the game
+```bash
+python snake.py
+```
+
+---
+
+## ✨ Features
+
+- 🐍 Animated snake with eyes
+- 🍎 Randomly spawning food
+- 📊 Score counter
+- 💀 Game Over screen
+- 🔄 Restart with R key
+- 🎨 Dark theme with smooth graphics
+
+---
+
+## 👨‍💻 Author
+
+Michał Mańkowski
